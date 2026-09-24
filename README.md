@@ -33,12 +33,11 @@ The project includes:
 
 The project includes a recorded walkthrough of the application:
 
-[Watch the demo video](videos/demo.mov)
+[Watch the demo video](videos/demo.mp4)
 
 The video demonstrates the browser interface, document-grounded question
 answering, retrieved evidence, table/figure support, and out-of-scope handling.
-GitHub may display the file as a downloadable repository asset rather than an
-inline player for `.mov` files.
+The MP4 uses H.264 encoding and is optimized for browser compatibility.
 
 ---
 
@@ -52,7 +51,7 @@ SmartDataSolutions/
 ├── data/
 │   └── aapl_2022_q3_10q.pdf      Supplied source document
 ├── videos/
-│   └── demo.mov                  Application walkthrough video
+│   └── demo.mp4                  Browser-compatible application walkthrough
 ├── scripts/
 │   └── ingest.py                  Rebuild the document index
 ├── src/
