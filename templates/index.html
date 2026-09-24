@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Apple Filing Intelligence | RAG Demo</title>
+  <style>
+    :root{--ink:#18232f;--muted:#6b7785;--line:#dce4ec;--blue:#1769e0;--blue-dark:#0d3e91;--soft:#f5f8fc;--green:#11845b;--orange:#b66b00}
+    *{box-sizing:border-box}body{margin:0;font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(135deg,#eef4fb 0,#fbfcfe 46%,#eef5f2 100%)}main{max-width:1180px;margin:0 auto;padding:28px 22px 64px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:52px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.3px}.brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--blue);color:white;box-shadow:0 8px 20px #1769e033}.topbar span{font-size:12px;color:var(--muted)}
+    .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:50px;align-items:end;margin-bottom:30px}.eyebrow{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.hero h1{font-size:clamp(38px,6vw,68px);line-height:1.02;letter-spacing:-3px;margin:12px 0 18px}.hero p{max-width:650px;color:var(--muted);font-size:17px;margin:0}.document-card{background:#ffffffb8;border:1px solid #fff;border-radius:18px;padding:20px;box-shadow:0 15px 45px #1b426b12}.document-card strong{display:block;font-size:17px;margin:7px 0}.document-card small{color:var(--muted)}.status{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-size:12px;font-weight:700;margin-top:14px}.status i{width:8px;height:8px;background:#20b77c;border-radius:50%}
+    .workspace{background:#fff;border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 20px 60px #23466913}.workspace-head{display:flex;justify-content:space-between;gap:20px;align-items:start;margin-bottom:18px}.workspace h2{font-size:22px;margin:5px 0}.workspace-head p{color:var(--muted);margin:0}.kbd{border:1px solid var(--line);border-radius:6px;padding:6px 9px;color:var(--muted);font-size:12px;white-space:nowrap}
+    textarea{display:block;width:100%;min-height:118px;padding:16px 17px;resize:vertical;border:1px solid var(--line);border-radius:14px;background:#fbfdff;color:var(--ink);font:inherit;outline:none;transition:.2s}textarea:focus{border-color:#78a9ef;box-shadow:0 0 0 4px #1769e012}.actions{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:13px}.examples{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:var(--soft);color:#455465;border-radius:999px;padding:8px 11px;font-size:12px;cursor:pointer}.chip:hover{border-color:#8db4ed;color:var(--blue)}button.search{border:0;border-radius:10px;background:var(--blue);color:white;padding:12px 19px;font:700 14px inherit;cursor:pointer;box-shadow:0 8px 18px #1769e033;white-space:nowrap}button.search:hover{background:var(--blue-dark)}button.search:disabled{opacity:.6;cursor:wait}
+    .card{background:white;border:1px solid var(--line);border-radius:17px;padding:22px;margin-top:20px}.answer-card{border-top:4px solid var(--blue)}.answer-header{display:flex;justify-content:space-between;gap:15px;align-items:start}.answer-header h2{margin:0;font-size:20px}.badge{display:inline-flex;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;background:#eaf2ff;color:var(--blue)}.badge.table{background:#fff3df;color:var(--orange)}.badge.figure{background:#e7f7f0;color:var(--green)}.answer{font-size:17px;line-height:1.7;margin:17px 0 12px}.meta{color:var(--muted);font-size:12px}.evidence-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:20px;padding:13px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--blue);font:700 14px inherit;text-align:left;cursor:pointer}.evidence-toggle span{font-size:20px;line-height:1}.evidence-panel{padding-top:4px}.hidden{display:none}.evidence{padding:15px 0;border-top:1px solid #edf1f5}.evidence:first-child{border-top:0}.evidence-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px}.evidence p{margin:0;color:#43505d}.figure{display:block;max-width:100%;max-height:260px;object-fit:contain;margin-top:12px;border:1px solid var(--line);border-radius:10px;background:#f7f9fb}.empty{padding:30px;text-align:center;color:var(--muted)}.error{color:#a83838;background:#fff3f3;border-color:#f0caca}.loader{display:flex;gap:10px;align-items:center;color:var(--muted)}.loader i{width:9px;height:9px;border-radius:50%;background:var(--blue);animation:pulse 1s infinite alternate}@keyframes pulse{to{opacity:.25;transform:scale(.7)}}
+    footer{display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:12px;margin-top:22px}@media(max-width:760px){main{padding:20px 14px 40px}.topbar{margin-bottom:35px}.hero{grid-template-columns:1fr;gap:22px}.hero h1{letter-spacing:-2px}.workspace{padding:18px}.workspace-head{display:block}.kbd{display:inline-block;margin-top:12px}.actions{display:block}.search{width:100%;margin-top:13px}.answer-header{display:block}.answer-header .badge{margin-top:10px}footer{display:block}footer span{display:block;margin-top:7px}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="topbar"><div class="brand"><span class="brand-mark">R</span><span>Retrieval Lab</span></div><span>Multimodal RAG · Final demonstration</span></header>
+  <section class="hero">
+    <div><div class="eyebrow">Document intelligence</div><h1>Ask the filing.<br><span style="color:var(--blue)">Trust the evidence.</span></h1><p>Explore Apple’s Q3 2022 Form 10-Q using grounded retrieval across narrative text, financial tables, and visual page evidence.</p></div>
+    <aside class="document-card"><div class="eyebrow">Active source</div><strong>Apple Inc. · Q3 2022 Form 10-Q</strong><small>28-page filing · indexed locally · page-level citations</small><div class="status"><i></i> Ready for questions</div></aside>
+  </section>
+  <section class="workspace">
+    <div class="workspace-head"><div><div class="eyebrow">Research workspace</div><h2>What would you like to verify?</h2><p>Ask a question and inspect the retrieved evidence below.</p></div><span class="kbd">⌘ Enter to search</span></div>
+    <textarea id="question" placeholder="Example: What were Apple’s total net sales for the third quarter of 2022?"></textarea>
+    <div class="actions"><div class="examples"><button class="chip" data-question="What were Apple’s total net sales for the third quarter of 2022?">Net sales</button><button class="chip" data-question="What were Apple’s net sales by product category?">Product table</button><button class="chip" data-question="Which pages contain figures or visual evidence?">Figures</button></div><button class="search" id="searchButton" onclick="ask()">Search evidence →</button></div>
+  </section>
+  <section id="result" aria-live="polite"></section>
+  <footer><span>Built with page-aware retrieval and evidence citations.</span><span>Answers are limited to the supplied document.</span></footer>
+</main>
+<script>
+  const question=document.querySelector('#question'), result=document.querySelector('#result'), button=document.querySelector('#searchButton');
+  document.querySelectorAll('.chip').forEach(chip=>chip.addEventListener('click',()=>{question.value=chip.dataset.question;question.focus()}));
+  question.addEventListener('keydown',event=>{if((event.metaKey||event.ctrlKey)&&event.key==='Enter')ask()});
+  async function ask(){
+    const value=question.value.trim(); if(!value){question.focus();return}
+    button.disabled=true; result.innerHTML='<div class="card"><div class="loader"><i></i>Searching the indexed filing and ranking evidence…</div></div>';
+    try{
+      const response=await fetch('/api/query',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({question:value})});
+      const data=await response.json(); if(!response.ok)throw new Error(data.detail||'Request failed');
+      const badges=data.modalities.map(modality=>`<span class="badge ${modality}">${modality}</span>`).join(' ');
+      const evidence=data.evidence.length?data.evidence.map(item=>`<article class="evidence"><div class="evidence-top"><span class="meta">Page ${item.page} · ${item.modality}</span><span class="meta">Relevance ${item.score.toFixed(2)}</span></div><p>${escapeHtml(item.text)}</p>${item.image_path?`<img class="figure" src="/api/figure/${item.image_path}" alt="Visual evidence from page ${item.page}">`:''}</article>`).join(''):'<div class="empty">No supporting evidence was retrieved.</div>';
+      result.innerHTML=`<div class="card answer-card"><div class="answer-header"><h2>Answer</h2><div>${badges}</div></div><p class="answer">${escapeHtml(data.answer)}</p><div class="meta">Grounded response · ${data.evidence.length} evidence item${data.evidence.length===1?'':'s'} retrieved</div><button class="evidence-toggle" id="evidenceToggle" aria-expanded="false">Supporting evidence <span>＋</span></button><div class="evidence-panel hidden" id="evidencePanel">${evidence}</div></div>`;
+      const evidenceToggle=document.querySelector('#evidenceToggle');
+      const evidencePanel=document.querySelector('#evidencePanel');
+      evidenceToggle.addEventListener('click',()=>{
+        const expanded=evidenceToggle.getAttribute('aria-expanded')==='true';
+        evidenceToggle.setAttribute('aria-expanded',String(!expanded));
+        evidenceToggle.innerHTML=expanded?'Supporting evidence <span>＋</span>':'Supporting evidence <span>−</span>';
+        evidencePanel.classList.toggle('hidden',expanded);
+      });
+      result.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(error){result.innerHTML=`<div class="card error">${escapeHtml(error instanceof Error?error.message:'Unable to search the document.')}</div>`}
+    finally{button.disabled=false}
+  }
+  function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+</script>
+</body>
+</html>

@@ -636,4 +636,3 @@ What is Apple’s current stock price?
 ```
 
 The final question should return the documented out-of-scope message.
-# Information-Retrieval-System
